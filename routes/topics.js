@@ -3,7 +3,7 @@ const { getAllTopics, getArticlesByTopicSlug, postArticlesByTopicSlug } = requir
 
 topicsRouter.route('/').get(getAllTopics);
 
-topicsRouter.route('/:topic_slug')
+topicsRouter.route('/:topic_slug/articles')
     .get(getArticlesByTopicSlug)
     .post(postArticlesByTopicSlug);
 

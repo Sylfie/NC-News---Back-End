@@ -12,14 +12,15 @@ const seedDB = ({ articleData, commentData, topicData, userData }) => {
             ])
         })
         .then(([topicDocs, userDocs]) => {
-            console.log(`Inserted ${topicDocs.length} topics and ${userDocs.length} users`)
-            return Promise.all([Article.insertMany(formatArticleData(articleData, userDocs)), userDocs]);
+            return Promise.all([Article.insertMany(formatArticleData(articleData, userDocs)), topicDocs, userDocs]);
         })
-        .then(([articleDocs, userDocs]) => {
-            console.log(`Inserted ${articleDocs.length} articles`)
-            return Comment.insertMany(formatCommentData(commentData, userDocs, articleDocs));
+        .then(([articleDocs, topicDocs, userDocs]) => {
+            return Promise.all([Comment.insertMany(formatCommentData(commentData, userDocs, articleDocs)), articleDocs, topicDocs, userDocs])
         })
-        .then(commentDocs => console.log(`Inserted ${commentDocs.length} comments`))
+        .then(([commentDocs, articleDocs, topicDocs, userDocs]) => {
+            console.log(`Inserted ${commentDocs.length} comments, ${articleDocs.length} articles, ${topicDocs.length} topics and ${userDocs.length} users`)
+            return [commentDocs, articleDocs, topicDocs, userDocs];
+        })
         .catch(err => console.log(err)); //remember next!?
 }
 

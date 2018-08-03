@@ -1,13 +1,21 @@
+const { getAll, getOneByParams, updateById } = require('../utils/controllerTemplates.js');
 const { User } = require('../models');
 
 const getAllUsers = (req, res, next) => {
-    res.status(200).send({ message: 'GETTING ALL Topics' })
-    // Comment.find()
+    getAll(User).then(users => {
+        users ? res.send(users) : next({ status: 404, msg: "Items not found" });
+    })
+        .catch(err => console.log(err.name));
 };
 
 const getUserByUsername = (req, res, next) => {
-    return;
-}; //optional
+    let username = { username: req.params.username };
+    getOneByParams(User, username)
+        .then(user => {
+            user ? res.send(user) : next({ status: 404, msg: "Item not found" });
+        })
+        .catch(err => console.log(err)) //next bloc!
+};
 
 
 

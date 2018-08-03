@@ -4,10 +4,12 @@
   "description": "Northcoders News API Sprint",
   "main": "index.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1",
+    "test": "mocha spec",
     "start": "node index.js",
     "dev": "nodemon listen.js",
-    "seed:dev": "node ./seed/seed.dev.js"
+    "seed:dev": "node ./seed/seed.dev.js",
+    "seed:test": "node ./seed/seed.test.js",
+    "seed:prod": "NODE_ENV=production node ./seed/seed.prod.js"
   },
   "author": "",
   "license": "ISC",

@@ -3,7 +3,7 @@ const { getAllComments, getCommentById, updateCommentById, deleteCommentById } =
 
 commentsRouter.route('/').get(getAllComments);
 
-commentsRouter.route('/:comment_id')
+commentsRouter.route('/:id')
     .get(getCommentById) //optional
     .put(updateCommentById)
     .delete(deleteCommentById)

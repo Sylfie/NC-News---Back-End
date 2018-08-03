@@ -3,11 +3,11 @@ const { getAllArticles, getArticleById, getCommentsByArticleId, postCommentByArt
 
 articlesRouter.route('/').get(getAllArticles);
 
-articlesRouter.route('/:article_id')
-    .get(getArticleById)
+articlesRouter.route('/:id')
+    .get(getArticleById)  //done
     .put(updateArticleById);
 
-articlesRouter.route('/:article_id/comments')
+articlesRouter.route('/:id/comments')
     .get(getCommentsByArticleId)
     .post(postCommentByArticleId)
 
