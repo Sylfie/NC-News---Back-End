@@ -6,7 +6,7 @@ const getAllTopics = (req, res, next) => {
     getAll(Topic).then(topics => {
         topics ? res.send({ topics }) : next({ status: 404, msg: "Items not found" });
     })
-    //catch block?!??!
+        .catch(err => next(err));
 };
 
 const getArticlesByTopicSlug = (req, res, next) => {
@@ -23,27 +23,21 @@ const getArticlesByTopicSlug = (req, res, next) => {
                 res.send({ articles });
             }
         })
-        .catch(err => {
-            err.name === 'CastError' ? next({ status: 400, msg: 'Error: bad user request' }) : next(err);
-        })
-
+        .catch(err => err.name === 'CastError' ? next({ status: 400, message: "Error: Bad server request" }) : next(err));
 };
 
 const postArticlesByTopicSlug = (req, res, next) => {
-    //if req.body does not have the necessary keys
     return Topic.findOne({ slug: req.params.topic_slug })
         .then(topic => {
-            if (topic === null) throw { status: 404, message: "No topic found" };
+            if (topic === null) throw { status: 404, message: "No matching topic found" };
             let body = req.body;
             let topicSlug = req.params;
             return postItemByParams(Article, topicSlug, body)
         })
         .then(newArticle => {
-            console.log(newArticle)
             if (newArticle) res.status(201).send({ message: `Sucessfully added an article titled ${newArticle.title} to ${newArticle.belongs_to}`, article: newArticle })
         })
-        .catch(err => console.log(err))
-    //validation error ?!
+        .catch(err => (err.name === "ValidationError" || err.name === "CastError") ? next({ status: 400, message: "Error: Bad server request" }) : next(err));
 };
 
 

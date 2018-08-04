@@ -3,9 +3,9 @@ const { Comment } = require('../models');
 
 const getAllComments = (req, res, next) => {
     getAll(Comment).then(comments => {
-        comments ? res.send(comments) : next({ status: 404, msg: "Items not found" });
+        comments ? res.send({ comments }) : next({ status: 404, msg: "Items not found" });
     })
-        .catch(err => console.log(err.name));
+        .catch(err => next(err));
 };
 
 const getCommentById = (req, res, next) => {
@@ -15,25 +15,18 @@ const getCommentById = (req, res, next) => {
 const updateCommentById = (req, res, next) => {
     let id = { _id: req.params.id };
     let { vote } = req.query;
-    console.log(id)
     return updateVoteById(Comment, id, vote)
         .then(updatedComment => {
-            res.status(200).send({ msg: `successfully updated the votes of comment ${id._id}`, comment: updatedComment })
+            res.status(200).send({ message: `successfully updated the votes of comment ${id._id}`, comment: updatedComment })
         })
-        .catch(err => console.log(err))
-    //updates successfully but cnsecutive votes do not increase, reseed?
+        .catch(err => err.name === "CastError" ? next({ status: 400, message: "Error: Bad server request" }) : next(err));
 };
 
 const deleteCommentById = (req, res, next) => {
     let id = { _id: req.params.id };
     return deleteById(Comment, id)
-        .then(removed => {
-            removed === null ? res.status(200).send({ msg: `successfully deleted comment ${id._id}` }) : next({ status: 500, msg: "Ineternal server error" })
-        })
-        .catch(err => console.log(err))
-    //message to be changed
-    //if a comment is already deleted, does it default to null?
-
+        .then(removed => (removed === null || removed == undefined) ? next({ status: 404, message: "Error: Comment not found" }) : res.status(200).send({ message: `successfully deleted comment ${id._id}`, removed_comment: removed }))
+        .catch(err => next(err));
 };
 
-module.exports = { getAllComments, getCommentById, updateCommentById, deleteCommentById };
+module.exports = { getAllComments, getCommentById, updateCommentById, deleteCommentById }; 

@@ -36,19 +36,15 @@ const postItemByParams = (Model, parameter, item) => {
 };
 
 const updateVoteById = (Model, parameter, vote) => {
-    //test if query is up/down/random stuff
-    let voteCount = vote === 'up' ? 1 : vote === 'down' ? -1 : 0
+    const voteCount = vote === 'up' ? 1 : vote === 'down' ? -1 : 0;
     const update = { $inc: { votes: voteCount } }
     return Model.findByIdAndUpdate(parameter, update, { new: true })
-        .then(item => {
-            return item;
-        })
+        .then(item => item)
 };
 
 const deleteById = (Model, parameter) => {
     return Model.findByIdAndRemove(parameter)
-        .then(removed => console.log(removed))
-    //204 with an empty obj
+        .then(removed => removed)
 };
 
 module.exports = { getAll, getOneByParams, getItemsByParams, postItemByParams, updateVoteById, deleteById };
