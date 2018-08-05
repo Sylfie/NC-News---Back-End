@@ -5,16 +5,15 @@ const apiRouter = require("./routes/api");
 const mongoose = require('mongoose');
 const { DB_URL } = process.env.NODE_ENV !== 'production' ? require('./config/config') : process.env;
 
+app.use('/api', express.static(__dirname + '/public'));
+
 mongoose.connect(DB_URL, { useNewUrlParser: true })
     .then(() => { console.log(`connected to ${DB_URL}`) })
-// app.set('view engine', 'ejs');
 
 app.use(bodyParser.json());
 
-// app.use(express.static('public'));
-
 app.get("/", (req, res) => {
-    res.send("home");
+    res.send({ message: "home" });
 });
 
 app.use("/api", apiRouter);

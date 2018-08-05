@@ -1,5 +1,4 @@
 const apiRouter = require("express").Router();
-
 const topicsRouter = require("./topics");
 const articlesRouter = require("./articles");
 const commentsRouter = require("./comments");
@@ -10,8 +9,9 @@ apiRouter.use("/articles", articlesRouter);
 apiRouter.use("/comments", commentsRouter);
 apiRouter.use("/users", usersRouter);
 
+
 apiRouter.get("/", (req, res) => {
-    res.status(200).send({ msg: "welcome to the api home page!" });
+    res.render('index');
 });
 
 module.exports = apiRouter;

@@ -1,0 +1,22 @@
+/* original NC colours ;) */
+
+body {
+    color: #fff;
+    background: #202829;
+    width: 80%;
+    margin: auto;
+    font-family: 'Rubik', sans-serif;
+}   
+
+h1 {
+    margin: 50px auto; 
+}
+
+h3 {
+    color: #ba1f31;
+    margin: 25px auto;
+}
+
+ul li:last-child {
+    margin-bottom: 100px;
+}

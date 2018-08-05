@@ -1,0 +1,127 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <link href="https://fonts.googleapis.com/css?family=Rubik" rel="stylesheet">
+    <link rel="stylesheet" href="./main.css">
+    <title>API Homepage</title>
+</head>
+
+<body>
+
+    <h1>
+        <a></a>Northcoders News</h1>
+    <h2>
+        <a></a>API Endpoints</h2>
+    <ul>
+        <li>
+            <h3>
+                <a></a>GET
+                <code>/api/topics</code>
+            </h3>
+            <p>Get all the topics</p>
+        </li>
+        <li>
+            <h3>
+                <a></a>GET
+                <code>/api/topics/:topic_slug/articles</code>
+            </h3>
+            <p>Return all the articles for a certain topic, e.g: /api/topics/football/articles</p>
+        </li>
+        <li>
+            <h3>
+                <a></a>POST
+                <code>/api/topics/:topic_slug/articles</code>
+            </h3>
+            <p>Add a new article to a topic. This route requires a JSON
+                <code>body</code> with a
+                <code>title</code> and
+                <code>body</code> key/value pairs
+                <br> e.g:
+                <code>{"title": "This is a new rticle", "body": "I am a very lond article."}</code>
+            </p>
+        </li>
+        <li>
+            <h3>
+                <a></a>GET
+                <code>/api/articles</code>
+            </h3>
+            <p>Returns all the articles</p>
+        </li>
+        <li>
+            <h3>
+                <a></a>GET
+                <code>/api/articles/:article_id</code>
+            </h3>
+            <p>Get an individual article</p>
+        </li>
+        <li>
+            <h3>
+                <a></a>GET
+                <code>/api/articles/:article_id/comments</code>
+            </h3>
+            <p>Get all the comments for a individual article</p>
+        </li>
+        <li>
+            <h3>
+                <a></a>POST
+                <code>/api/articles/:article_id/comments</code>
+            </h3>
+            <p>Add a new comment to an article. This route requires a JSON
+                <code>body</code> with a
+                <code>comment</code> and
+                <code>cerated_by</code> key/value pairs
+                <br> e.g:
+                <code>{"comment": "This is my new comment", "created_by":"<valid_mongo_id>" }</code>
+            </p>
+        </li>
+        <li>
+            <h3>
+                <a></a>PUT
+                <code>/api/articles/:article_id</code>
+            </h3>
+            <p>Increment or Decrement the votes of an article by one. This route requires a
+                <code>vote</code> query of 'up' or 'down'
+                <br> e.g:
+                <code>https://ncnewsbend.herokuapp.com/api/articles/:article_id?vote=up</code>
+            </p>
+        </li>
+        <li>
+            <h3>
+                <a></a>PUT
+                <code>/api/comments/:comment_id</code>
+            </h3>
+            <p>Increment or Decrement the votes of a comment by one. This route requires a
+                <code>vote</code> query of 'up' or 'down'
+                <br> e.g:
+                <code>https://ncnewsbend.herokuapp.com/api/comments/:comment_id?vote=down</code>
+            </p>
+        </li>
+        <li>
+            <h3>
+                <a></a>DELETE
+                <code>/api/comments/:comment_id</code>
+            </h3>
+            <p>Deletes a comment if the comment was created by the Northcoder user</p>
+        </li>
+        <li>
+            <h3>
+                <a></a>GET
+                <code>/api/users</code>
+            </h3>
+            <p>Gets all users</p>
+        </li>
+        <li>
+            <h3>
+                <a></a>GET
+                <code>/api/users/:username</code>
+            </h3>
+            <p>Returns a JSON object with the profile data for the specified user.</p>
+        </li>
+    </ul>
+</body>
+
+</html>
