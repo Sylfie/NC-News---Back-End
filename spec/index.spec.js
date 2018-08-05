@@ -8,7 +8,10 @@ const mongoose = require('mongoose');
 const { expect } = require('chai');
 
 describe('/api', () => {
-    //WARNING! describe block for each route (besides topics because its first) has a beforeEach hook error which might have to do with beforeEach's default async timeout. If all tests are run, it will break, if it's run with .only, it works fine
+    //WARNING! describe block for each route has a beforeEach hook error which might have to do with beforeEach's default async timeout. If all tests are run, it will break, if block's run with .only, it works fine.
+
+    //I have tried to increase the default value of 2000ms to 10000ms but it still errored out, tested on Linux and Windows. This might also be related to nested describe blocks. I decided to keep the nesting for organising purposes as the code is still functional with .only
+
     describe('/topics', () => {
         let comments, articles, topics, users;
         beforeEach(() => {
@@ -61,7 +64,7 @@ describe('/api', () => {
                 .then(res => {
                     expect(res.body).to.have.key('message');
                     expect(res.body.message).to.equal("No such topic slug found");
-                })
+                });
         });
         //post article by topic slug
         it('POST /topics/:topics_slug/articles - returns all articles from a topic based on topic slug and status 201', () => {
@@ -187,7 +190,7 @@ describe('/api', () => {
                     articles = docs[1];
                     topics = docs[2];
                     users = docs[3];
-                })
+                });
         });
         after(() => {
             mongoose.disconnect()
