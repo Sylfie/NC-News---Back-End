@@ -3,7 +3,7 @@ const { User } = require('../models');
 
 const getAllUsers = (req, res, next) => {
     getAll(User).then(users => users ? res.send({ users }) : next({ status: 404, message: "Error: No users found" }))
-        .catch(err => next(err));
+        .catch(next);
 };
 
 const getUserByUsername = (req, res, next) => {

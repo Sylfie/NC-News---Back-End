@@ -6,7 +6,7 @@ const getAllTopics = (req, res, next) => {
     getAll(Topic).then(topics => {
         topics ? res.send({ topics }) : next({ status: 404, msg: "Items not found" });
     })
-        .catch(err => next(err));
+        .catch(next);
 };
 
 const getArticlesByTopicSlug = (req, res, next) => {

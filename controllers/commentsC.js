@@ -5,7 +5,7 @@ const getAllComments = (req, res, next) => {
     getAll(Comment).then(comments => {
         comments ? res.send({ comments }) : next({ status: 404, msg: "Items not found" });
     })
-        .catch(err => next(err));
+        .catch(next);
 };
 
 const getCommentById = (req, res, next) => {
