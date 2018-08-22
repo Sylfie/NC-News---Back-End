@@ -3,9 +3,16 @@ const { Article, Comment } = require('../models');
 
 const getAllArticles = (req, res, next) => {
     getAll(Article).then(articles => {
-        articles ? res.send({ articles }) : next({ status: 404, msg: "Items not found" });
-    }) //rreturn comment count for each article? p.all with forEach/...articles.map? mutation? @.@
-        .catch(next);
+        return Promise.all(articles.map(article => {
+            const id = { _id: article._doc._id };
+            return Promise.all([article._doc, getItemsByParams(Comment, id)])
+                .then(([articleItem, comments]) => ({ ...articleItem, comment_count: comments.length }))
+        }))
+    })
+        .then(articles => {
+            articles ? res.send({ articles }) : next({ status: 404, msg: "Items not found" })
+        })
+        .catch(err => console.log(err));
 };
 
 const getArticleById = (req, res, next) => {
@@ -13,7 +20,7 @@ const getArticleById = (req, res, next) => {
     return Promise.all([getOneByParams(Article, id), getItemsByParams(Comment, id)])
         .then(([article, comments]) => {
             (article === undefined || article === null) ? next({ status: 404, message: "Error: Article not found" }) : res.send({ article: { ...article._doc, comment_count: comments.length } });
-        }) //so ...article returns a monstrosity, article._doc!????
+        })
         .catch(err => err.name === 'CastError' ? next({ status: 400, message: "Error: Invalid user id!" }) : next(err));
 };
 
@@ -38,7 +45,7 @@ const postCommentByArticleId = (req, res, next) => {
             if (article === null) throw { status: 404, message: "Error: No article found" };
             const { body } = req;
             return postItemByParams(Comment, id, body)
-        }) //update article __v when we add a new comment?
+        })
         .then(newComment => {
             if (newComment) res.status(201).send({ message: `Sucessfully added a new comment to article with ID of ${newComment.belongs_to}`, comment: newComment })
         })

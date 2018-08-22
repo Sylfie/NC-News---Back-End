@@ -8,24 +8,21 @@ const mongoose = require('mongoose');
 const { expect } = require('chai');
 
 describe('/api', () => {
-    //WARNING! describe block for each route has a beforeEach hook error which might have to do with beforeEach's default async timeout. If all tests are run, it will break, if block's run with .only, it works fine.
-
-    //I have tried to increase the default value of 2000ms to 10000ms but it still errored out, tested on Linux and Windows. This might also be related to nested describe blocks. I decided to keep the nesting for organising purposes as the code is still functional with .only
+    let comments, articles, topics, users;
+    beforeEach(() => {
+        return seedDB(data)
+            .then(docs => {
+                comments = docs[0];
+                articles = docs[1];
+                topics = docs[2];
+                users = docs[3];
+            })
+    });
+    after(() => {
+        mongoose.disconnect()
+    });
 
     describe('/topics', () => {
-        let comments, articles, topics, users;
-        beforeEach(() => {
-            return seedDB(data)
-                .then(docs => {
-                    comments = docs[0];
-                    articles = docs[1];
-                    topics = docs[2];
-                    users = docs[3];
-                })
-        });
-        after(() => {
-            mongoose.disconnect()
-        });
         it('GET /topics - returns all topics and status 200', () => {
             return request
                 .get('/api/topics')
@@ -119,19 +116,6 @@ describe('/api', () => {
         });
     });
     describe('users', () => {
-        let comments, articles, topics, users;
-        beforeEach(() => {
-            return seedDB(data)
-                .then(docs => {
-                    comments = docs[0];
-                    articles = docs[1];
-                    topics = docs[2];
-                    users = docs[3];
-                })
-        });
-        after(() => {
-            mongoose.disconnect()
-        });
         // all users:
         it('GET /users - returns all topics and status 200', () => {
             return request
@@ -182,19 +166,6 @@ describe('/api', () => {
         });
     });
     describe('articles', () => {
-        beforeEach(() => {
-            let comments, articles, topics, users;
-            return seedDB(data)
-                .then(docs => {
-                    comments = docs[0];
-                    articles = docs[1];
-                    topics = docs[2];
-                    users = docs[3];
-                });
-        });
-        after(() => {
-            mongoose.disconnect()
-        });
         // all articles:
         it('GET /articles - returns all articles and status 200', () => {
             return request
@@ -214,7 +185,7 @@ describe('/api', () => {
                 .then(res => {
                     expect(res.body).to.have.all.keys('article');
                     expect(res.body.article).to.be.an("object");
-                    expect(res.body.article).to.have.all.keys('_id', 'votes', 'body', 'created_at', 'created_by', 'belongs_to', 'title', '__v');
+                    expect(res.body.article).to.have.all.keys('_id', 'votes', 'body', 'created_at', 'created_by', 'belongs_to', 'title', '__v', 'comment_count');
                     expect(res.body.article.body).to.be.a('string');
                     expect(res.body.article.body).to.equal('I find this existence challenging');
                 });
@@ -354,21 +325,7 @@ describe('/api', () => {
         });
     });
     describe('comments', () => {
-        //get all comments:
-        let comments, articles, topics, users;
-        beforeEach(() => {
-            return seedDB(data)
-                .then(docs => {
-                    comments = docs[0];
-                    articles = docs[1];
-                    topics = docs[2];
-                    users = docs[3];
-                })
-        });
-        after(() => {
-            mongoose.disconnect()
-        });
-        // 200 all articles:
+        // 200 all comments:
         it('GET /comments - returns all comments and status 200', () => {
             return request
                 .get('/api/comments')
