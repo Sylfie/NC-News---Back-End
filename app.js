@@ -1,9 +1,12 @@
 const express = require("express");
 const app = express();
+const cors = require("cors");
 const bodyParser = require("body-parser");
 const apiRouter = require("./routes/api");
 const mongoose = require('mongoose');
 const { DB_URL } = process.env.NODE_ENV !== 'production' ? require('./config/config') : process.env;
+
+app.use(cors());
 
 app.use('/api', express.static(__dirname + '/public'));
 
