@@ -2,13 +2,15 @@ const { getAll, getOneByParams, getItemsByParams, postItemByParams, updateVoteBy
 const { Article, Comment } = require('../models');
 
 const getAllArticles = (req, res, next) => {
-    getAll(Article).then(articles => {
-        return Promise.all(articles.map(article => {
-            const id = { _id: article._doc._id };
-            return Promise.all([article._doc, getItemsByParams(Comment, id)])
-                .then(([articleItem, comments]) => ({ ...articleItem, comment_count: comments.length }))
-        }))
-    })
+    getAll(Article)
+        .populate("created_by")
+        .then(articles => {
+            return Promise.all(articles.map(article => {
+                const id = { _id: article._doc._id };
+                return Promise.all([article._doc, getItemsByParams(Comment, id)])
+                    .then(([articleItem, comments]) => ({ ...articleItem, comment_count: comments.length }))
+            }))
+        })
         .then(articles => {
             articles ? res.send({ articles }) : next({ status: 404, msg: "Items not found" })
         })
@@ -17,7 +19,7 @@ const getAllArticles = (req, res, next) => {
 
 const getArticleById = (req, res, next) => {
     let id = { _id: req.params.id };
-    return Promise.all([getOneByParams(Article, id), getItemsByParams(Comment, id)])
+    return Promise.all([getOneByParams(Article, id).populate("created_by"), getItemsByParams(Comment, id)])
         .then(([article, comments]) => {
             (article === undefined || article === null) ? next({ status: 404, message: "Error: Article not found" }) : res.send({ article: { ...article._doc, comment_count: comments.length } });
         })
@@ -27,6 +29,7 @@ const getArticleById = (req, res, next) => {
 const getCommentsByArticleId = (req, res, next) => {
     let id = { _id: req.params.id };
     getItemsByParams(Comment, id)
+        .populate("created_by")
         .then(comments => {
             if (comments === undefined || comments.length === 0) {
                 throw { status: 404, message: "Error: No comments found" };

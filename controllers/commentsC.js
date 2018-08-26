@@ -2,9 +2,11 @@ const { getAll, getOneByParams, updateVoteById, deleteById } = require('../utils
 const { Comment } = require('../models');
 
 const getAllComments = (req, res, next) => {
-    getAll(Comment).then(comments => {
-        comments ? res.send({ comments }) : next({ status: 404, msg: "Items not found" });
-    })
+    getAll(Comment)
+        .populate("created_by")
+        .then(comments => {
+            comments ? res.send({ comments }) : next({ status: 404, msg: "Items not found" });
+        })
         .catch(next);
 };
 
