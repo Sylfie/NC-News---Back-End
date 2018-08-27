@@ -117,7 +117,7 @@ describe('/api', () => {
     });
     describe('users', () => {
         // all users:
-        it('GET /users - returns all topics and status 200', () => {
+        it('GET /users - returns all users and status 200', () => {
             return request
                 .get('/api/users')
                 .expect(200)
@@ -127,8 +127,8 @@ describe('/api', () => {
                     expect(res.body.users[0]).to.have.all.keys('_id', 'username', 'name', 'avatar_url', '__v')
                 });
         });
-        //get user by uname:
-        it('GET /users/:username - returns all users and status 200', () => {
+        //get user by username:
+        it('GET /users/:username - returns a user by username and status 200', () => {
             return request
                 .get('/api/users/dedekind561')
                 .expect(200)
