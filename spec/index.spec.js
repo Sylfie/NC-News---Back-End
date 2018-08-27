@@ -51,7 +51,7 @@ describe('/api', () => {
                 .then(res => {
                     expect(res.body).to.have.all.keys('articles');
                     expect(res.body.articles[0]).to.be.an("object");
-                    expect(res.body.articles[0]).to.have.all.keys('_id', 'title', 'votes', 'created_by', 'created_at', 'belongs_to', '__v', 'body');
+                    expect(res.body.articles[0]).to.have.all.keys('_id', 'title', 'votes', 'created_by', 'created_at', 'belongs_to', 'comment_count', '__v', 'body');
                 });
         });
         it('GET /topics/:topics_slug/articles - returns an error message and status 404 when a slug is not found', () => {
@@ -174,7 +174,7 @@ describe('/api', () => {
                 .then(res => {
                     expect(res.body).to.have.all.keys('articles');
                     expect(res.body.articles[0]).to.be.an("object");
-                    expect(res.body.articles[0]).to.have.all.keys('_id', 'votes', 'body', 'created_at', 'created_by', 'belongs_to', 'title', '__v')
+                    expect(res.body.articles[0]).to.have.all.keys('_id', 'votes', 'body', 'created_at', 'created_by', 'belongs_to', 'comment_count', 'title', '__v')
                 });
         });
         //get article by id:

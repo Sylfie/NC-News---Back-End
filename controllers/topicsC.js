@@ -1,5 +1,5 @@
 const { getAll, getOneByParams, updateById, postItemByParams, getItemsByParams } = require('../utils/controllerTemplates.js');
-const { Topic, Article } = require('../models');
+const { Topic, Article, Comment } = require('../models');
 
 
 const getAllTopics = (req, res, next) => {
@@ -15,6 +15,13 @@ const getArticlesByTopicSlug = (req, res, next) => {
         .then(topics => {
             if (topics.find(topic => topic.slug === req.params.topic_slug) === undefined) throw { status: 404, message: "No such topic slug found" };
             return getItemsByParams(Article, topicSlug)
+        })
+        .then(articles => {
+            return Promise.all(articles.map(article => {
+                const id = { _id: article._doc._id };
+                return Promise.all([article._doc, getItemsByParams(Comment, id)])
+                    .then(([articleItem, comments]) => ({ ...articleItem, comment_count: comments.length }))
+            }))
         })
         .then(articles => {
             if (articles === undefined || articles.length === 0) {

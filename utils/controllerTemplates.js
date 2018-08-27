@@ -10,13 +10,8 @@ const getItemsByParams = (Model, parameter) => {
     return Model.find({ belongs_to: parameter.topic_slug || parameter._id })
 };
 
-//to be refactored like above:
 const postItemByParams = (Model, parameter, item) => {
-    if (parameter.hasOwnProperty('_id')) {
-        return new Model({ ...item, belongs_to: parameter._id, }).save()
-    } else if (parameter.hasOwnProperty('topic_slug')) {
-        return new Model({ ...item, belongs_to: parameter.topic_slug, }).save()
-    }
+    return new Model({ ...item, belongs_to: parameter.topic_slug || parameter._id }).save()
 };
 
 const updateVoteById = (Model, parameter, vote) => {
